@@ -36,8 +36,8 @@ entry:
 
 **Why isn't this on Hackage?**
 
-The dependencies all require static linking against LLVM which has a reckless diregard for backwards
-compatability. Because the system packages involved are not managed by cabal, unless something like NixOS is
+The dependencies all require static linking against LLVM which has a reckless disregard for backwards
+compatibility. Because the system packages involved are not managed by cabal, unless something like NixOS is
 used, it's unlikely that ``cabal install`` would ever behave the same on two different systems. The linker
 behavior also differs even between different versions of GHC.
 
