@@ -39,14 +39,19 @@ addDefn d = do
   defs <- gets moduleDefinitions
   modify $ \s -> s { moduleDefinitions = defs ++ [d] }
 
-define ::  Type -> String -> [(Type, Name)] -> [BasicBlock] -> LLVM ()
+define ::  Type -> String -> [(Type, Name)] -> Codegen a -> LLVM ()
 define retty label argtys body = addDefn $
   GlobalDefinition $ functionDefaults {
     name        = Name label
   , parameters  = ([Parameter ty nm [] | (ty, nm) <- argtys], False)
   , returnType  = retty
-  , basicBlocks = body
+  , basicBlocks = bls
   }
+  where
+    bls = createBlocks $ execCodegen $ do
+      enter <- addBlock entryBlockName
+      void $ setBlock enter
+      body
 
 external ::  Type -> String -> [(Type, Name)] -> LLVM ()
 external retty label argtys = addDefn $
