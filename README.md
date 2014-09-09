@@ -1,7 +1,7 @@
 llvm-tutorial-standalone
 ------------------------
 
-A simple LLVM builder DSL in a Haskell DSL. Basically the same code as the [Haskell Kaleidoscope
+A simple LLVM builder DSL. Basically the same code as the [Haskell Kaleidoscope
 tutorial](http://www.stephendiehl.com/llvm/) uses but without going through an AST. Multiple people asked for
 this to be extracted. If you want to roll a LLVM compiler backend this might be a good starting point.
 
@@ -44,7 +44,7 @@ behavior also differs even between different versions of GHC.
 I'll suggest the following versions which track the NixOS versions, but your mileage may vary.
 
 * ghc 7.8.3
-* llvm-3.4.1 
+* llvm 3.4.1 
 * llvm-general 3.4.4.0
 * llvm-general-pure 3.4.4.0
 
