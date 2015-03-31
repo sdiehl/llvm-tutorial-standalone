@@ -9,8 +9,8 @@ import Data.List
 import Data.Function
 import qualified Data.Map as Map
 
-import Control.Monad.State hiding (void)
 import Control.Applicative
+import Control.Monad.State
 
 import LLVM.General.AST
 import LLVM.General.AST.Type
