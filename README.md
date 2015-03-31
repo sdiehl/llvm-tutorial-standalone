@@ -55,7 +55,7 @@ logic = do
     res <- fadd a b
     ret res
 
-main :: IO (AST.MOdule)
+main :: IO (AST.Module)
 main = do
   let ast = runLLVM initModule logic
   runJIT ast
