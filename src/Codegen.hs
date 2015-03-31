@@ -9,10 +9,11 @@ import Data.List
 import Data.Function
 import qualified Data.Map as Map
 
-import Control.Monad.State
+import Control.Monad.State hiding (void)
 import Control.Applicative
 
 import LLVM.General.AST
+import LLVM.General.AST.Type
 import LLVM.General.AST.Global
 import qualified LLVM.General.AST as AST
 
@@ -50,7 +51,7 @@ define retty label argtys body = addDefn $
   where
     bls = createBlocks $ execCodegen $ do
       enter <- addBlock entryBlockName
-      void $ setBlock enter
+      _ <- setBlock enter
       body
 
 external ::  Type -> String -> [(Type, Name)] -> LLVM ()
@@ -145,14 +146,14 @@ fresh = do
   modify $ \s -> s { count = 1 + i }
   return $ i + 1
 
-instr :: Instruction -> Codegen (Operand)
-instr ins = do
+instr :: Type -> Instruction -> Codegen (Operand)
+instr ty ins = do
   n <- fresh
   let ref = (UnName n)
   blk <- current
   let i = stack blk
   modifyBlock (blk { stack = i ++ [ref := ins] } )
-  return $ local ref
+  return $ local ty ref
 
 terminator :: Named Terminator -> Codegen (Named Terminator)
 terminator trm = do
@@ -220,52 +221,52 @@ getvar var = do
 -------------------------------------------------------------------------------
 
 -- References
-local ::  Name -> Operand
+local ::  Type -> Name -> Operand
 local = LocalReference
 
-global ::  Name -> C.Constant
+global :: Type -> Name -> C.Constant
 global = C.GlobalReference
 
-externf :: Name -> Operand
-externf = ConstantOperand . C.GlobalReference
+externf :: Type -> Name -> Operand
+externf ty nm = ConstantOperand (C.GlobalReference ty nm)
 
 -- Arithmetic and Constants
 fadd :: Operand -> Operand -> Codegen Operand
-fadd a b = instr $ FAdd a b []
+fadd a b = instr float $ FAdd NoFastMathFlags a b []
 
 fsub :: Operand -> Operand -> Codegen Operand
-fsub a b = instr $ FSub a b []
+fsub a b = instr float $ FSub NoFastMathFlags a b []
 
 fmul :: Operand -> Operand -> Codegen Operand
-fmul a b = instr $ FMul a b []
+fmul a b = instr float $ FMul NoFastMathFlags a b []
 
 fdiv :: Operand -> Operand -> Codegen Operand
-fdiv a b = instr $ FDiv a b []
+fdiv a b = instr float $ FDiv NoFastMathFlags a b []
 
 fcmp :: FP.FloatingPointPredicate -> Operand -> Operand -> Codegen Operand
-fcmp cond a b = instr $ FCmp cond a b []
+fcmp cond a b = instr float $ FCmp cond a b []
 
 cons :: C.Constant -> Operand
 cons = ConstantOperand
 
 uitofp :: Type -> Operand -> Codegen Operand
-uitofp ty a = instr $ UIToFP a ty []
+uitofp ty a = instr float $ UIToFP a ty []
 
 toArgs :: [Operand] -> [(Operand, [A.ParameterAttribute])]
 toArgs = map (\x -> (x, []))
 
 -- Effects
 call :: Operand -> [Operand] -> Codegen Operand
-call fn args = instr $ Call False CC.C [] (Right fn) (toArgs args) [] []
+call fn args = instr float $ Call False CC.C [] (Right fn) (toArgs args) [] []
 
 alloca :: Type -> Codegen Operand
-alloca ty = instr $ Alloca ty Nothing 0 []
+alloca ty = instr float $ Alloca ty Nothing 0 []
 
 store :: Operand -> Operand -> Codegen Operand
-store ptr val = instr $ Store False ptr val Nothing 0 []
+store ptr val = instr float $ Store False ptr val Nothing 0 []
 
 load :: Operand -> Codegen Operand
-load ptr = instr $ Load False ptr Nothing 0 []
+load ptr = instr float $ Load False ptr Nothing 0 []
 
 -- Control Flow
 br :: Name -> Codegen (Named Terminator)
@@ -275,7 +276,7 @@ cbr :: Operand -> Name -> Name -> Codegen (Named Terminator)
 cbr cond tr fl = terminator $ Do $ CondBr cond tr fl []
 
 phi :: Type -> [(Operand, Name)] -> Codegen Operand
-phi ty incoming = instr $ Phi ty incoming []
+phi ty incoming = instr float $ Phi ty incoming []
 
 ret :: Operand -> Codegen (Named Terminator)
 ret val = terminator $ Do $ Ret (Just val) []

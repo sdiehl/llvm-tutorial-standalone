@@ -2,8 +2,46 @@ llvm-tutorial-standalone
 ------------------------
 
 A simple LLVM builder DSL. Basically the same code as the [Haskell Kaleidoscope
-tutorial](http://www.stephendiehl.com/llvm/) uses but without going through an AST. Multiple people asked for
-this to be extracted. If you want to roll a LLVM compiler backend this might be a good starting point.
+tutorial](http://www.stephendiehl.com/llvm/) uses but without going through an
+AST. Multiple people asked for this to be extracted. If you want to roll a LLVM
+compiler backend this might be a good starting point.
+
+Install
+-------
+
+Check that your installed llvm version is precisely 3.4.
+
+```bash
+$ llvm-config --version
+3.4
+```
+
+To install:
+
+```bash
+$ cabal sandbox init
+$ cabal install --only-dependencies
+$ cabal build
+```
+
+To run:
+
+```bash
+$ cabal run
+sandboxed 
+Preprocessing executable 'standalone' for tutorial-0.2.0.0...
+; ModuleID = 'my cool jit'
+
+define double @main() {
+  entry:
+    ret double 3.000000e+01
+}
+
+Evaluated to: 30.0
+```
+
+Usage
+-----
 
 ```haskell
 initModule :: AST.Module
@@ -34,22 +72,8 @@ entry:
 }
 ```
 
-**Why isn't this on Hackage?**
-
-The dependencies all require static linking against LLVM which has a reckless disregard for backwards
-compatibility. Because the system packages involved are not managed by cabal, unless something like NixOS is
-used, it's unlikely that ``cabal install`` would ever behave the same on two different systems. The linker
-behavior also differs even between different versions of GHC.
-
-I'll suggest the following versions which track the NixOS versions, but your mileage may vary.
-
-* ghc 7.8.3
-* llvm 3.4.1 
-* llvm-general 3.4.4.0
-* llvm-general-pure 3.4.4.0
-
 License
 -------
 
 Released under the MIT License.
-Copyright (c) 2014, Stephen Diehl
+Copyright (c) 2014-2015, Stephen Diehl
