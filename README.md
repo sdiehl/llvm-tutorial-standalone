@@ -47,6 +47,7 @@ Usage
 initModule :: AST.Module
 initModule = emptyModule "my cool jit"
 
+logic :: LLVM ()
 logic = do
   define double "main" [] $ do
     let a = cons $ C.Float (F.Double 10)
@@ -54,6 +55,7 @@ logic = do
     res <- fadd a b
     ret res
 
+main :: IO (AST.MOdule)
 main = do
   let ast = runLLVM initModule logic
   runJIT ast
