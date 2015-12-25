@@ -17,6 +17,7 @@ import LLVM.General.AST.Type
 import LLVM.General.AST.Global
 import qualified LLVM.General.AST as AST
 
+import qualified LLVM.General.AST.Linkage as L
 import qualified LLVM.General.AST.Constant as C
 import qualified LLVM.General.AST.Attribute as A
 import qualified LLVM.General.AST.CallingConvention as CC
@@ -58,6 +59,7 @@ external ::  Type -> String -> [(Type, Name)] -> LLVM ()
 external retty label argtys = addDefn $
   GlobalDefinition $ functionDefaults {
     name        = Name label
+  , linkage     = L.External
   , parameters  = ([Parameter ty nm [] | (ty, nm) <- argtys], False)
   , returnType  = retty
   , basicBlocks = []
@@ -70,6 +72,9 @@ external retty label argtys = addDefn $
 -- IEEE 754 double
 double :: Type
 double = FloatingPointType 64 IEEE
+
+void :: Type
+void = AST.VoidType
 
 -------------------------------------------------------------------------------
 -- Names
@@ -280,3 +285,6 @@ phi ty incoming = instr float $ Phi ty incoming []
 
 ret :: Operand -> Codegen (Named Terminator)
 ret val = terminator $ Do $ Ret (Just val) []
+
+retvoid :: Codegen (Named Terminator)
+retvoid = terminator $ Do $ Ret Nothing []

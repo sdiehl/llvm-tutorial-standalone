@@ -1,0 +1,1 @@
+void myfunc(int count);
