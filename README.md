@@ -1,6 +1,8 @@
 llvm-tutorial-standalone
 ------------------------
 
+[![Build Status](https://travis-ci.org/sdiehl/llvm-tutorial-standalone.svg)](https://travis-ci.org/sdiehl/llvm-tutorial-standalone)
+
 A tiny LLVM builder DSL. Basically the same code as the [Haskell Kaleidoscope
 tutorial](http://www.stephendiehl.com/llvm/) uses but without going through a
 frontend AST. Multiple people asked for this to be extracted.
