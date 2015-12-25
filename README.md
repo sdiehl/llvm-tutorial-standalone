@@ -53,9 +53,9 @@ Usage
 
 Code is split across
 
-* Codegen
-* JIT.
-* Main
+* [Codegen](https://github.com/sdiehl/llvm-tutorial-standalone/blob/master/src/Codegen.hs)
+* [JIT](https://github.com/sdiehl/llvm-tutorial-standalone/blob/master/src/JIT.hs)
+* [Main](https://github.com/sdiehl/llvm-tutorial-standalone/blob/master/src/Main.hs)
 
 The main program will use the embedded LLVM Monad to define a small program
 which will add two constants together. 
