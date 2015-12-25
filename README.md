@@ -94,6 +94,33 @@ entry:
 }
 ```
 
+Another example which links against an arbitrary C function into the LLVM JIT
+inside of Haskell is provided as a supplement to the basic example.
+
+* [FII](https://github.com/sdiehl/llvm-tutorial-standalone/blob/master/src/FFI.hs)
+
+```cpp
+#include <stdio.h>
+
+void myfunc(int count) {
+    int i;
+    for (i = 0; i < count; i++) {
+        printf("Hello Haskell\n");	
+    }
+}
+```
+
+```haskell
+example :: LLVM ()
+example = do
+  external void "myfunc" [(AST.IntegerType 64, "count")]
+  define void "main" [] $ do
+    let a = cons $ C.Int 64 5
+    call (externf AST.VoidType "myfunc") [a]
+    retvoid
+  ```
+
+
 License
 -------
 
