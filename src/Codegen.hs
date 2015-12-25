@@ -26,11 +26,11 @@ import qualified LLVM.General.AST.FloatingPointPredicate as FP
 -- Module Level
 -------------------------------------------------------------------------------
 
-newtype LLVM a = LLVM { unLLVM :: State AST.Module a }
+newtype LLVM a = LLVM (State AST.Module a)
   deriving (Functor, Applicative, Monad, MonadState AST.Module )
 
 runLLVM :: AST.Module -> LLVM a -> AST.Module
-runLLVM = flip (execState . unLLVM)
+runLLVM mod (LLVM m) = execState m mod
 
 emptyModule :: String -> AST.Module
 emptyModule label = defaultModule { moduleName = label }

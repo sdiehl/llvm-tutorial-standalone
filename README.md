@@ -1,10 +1,12 @@
 llvm-tutorial-standalone
 ------------------------
 
-A simple LLVM builder DSL. Basically the same code as the [Haskell Kaleidoscope
-tutorial](http://www.stephendiehl.com/llvm/) uses but without going through an
-AST. Multiple people asked for this to be extracted. If you want to roll a LLVM
-compiler backend this might be a good starting point.
+A tiny LLVM builder DSL. Basically the same code as the [Haskell Kaleidoscope
+tutorial](http://www.stephendiehl.com/llvm/) uses but without going through a
+frontend AST. Multiple people asked for this to be extracted.
+
+If you want to roll a custom LLVM compiler backend this might be a good starting
+point for the backend.
 
 Install
 -------
@@ -16,7 +18,14 @@ $ llvm-config --version
 3.4
 ```
 
-To install:
+To build using stack:
+
+```bash
+$ stack build
+$ stack exec main
+```
+
+To build using cabal:
 
 ```bash
 $ cabal sandbox init
@@ -28,7 +37,6 @@ To run:
 
 ```bash
 $ cabal run
-sandboxed 
 Preprocessing executable 'standalone' for tutorial-0.2.0.0...
 ; ModuleID = 'my cool jit'
 
@@ -42,6 +50,15 @@ Evaluated to: 30.0
 
 Usage
 -----
+
+Code is split across
+
+* Codegen
+* JIT.
+* Main
+
+The main program will use the embedded LLVM Monad to define a small program
+which will add two constants together. 
 
 ```haskell
 initModule :: AST.Module
@@ -62,7 +79,8 @@ main = do
   return ast
 ```
 
-This will generate and JIT compile into the following IR:
+This will generate and JIT compile into the following IR and use the LLVM
+execution engine to JIT it to machien code.
 
 ```llvm
 ; ModuleID = 'my cool jit'
@@ -78,4 +96,4 @@ License
 -------
 
 Released under the MIT License.
-Copyright (c) 2014-2015, Stephen Diehl
+Copyright (c) 2014-2016, Stephen Diehl
