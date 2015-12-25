@@ -1,5 +1,6 @@
 name:                tutorial
 version:             0.2.0.0
+synopsis:            Standalone LLVM JIT Tutorial
 license:             MIT
 category:            Compilers
 description:         
