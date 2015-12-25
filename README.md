@@ -97,7 +97,7 @@ entry:
 Another example which links against an arbitrary C function into the LLVM JIT
 inside of Haskell is provided as a supplement to the basic example.
 
-* [FII](https://github.com/sdiehl/llvm-tutorial-standalone/blob/master/src/FFI.hs)
+* [FFI](https://github.com/sdiehl/llvm-tutorial-standalone/blob/master/src/FFI.hs)
 
 ```cpp
 #include <stdio.h>
