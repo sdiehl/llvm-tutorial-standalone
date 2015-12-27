@@ -2,6 +2,7 @@ llvm-tutorial-standalone
 ------------------------
 
 [![Build Status](https://travis-ci.org/sdiehl/llvm-tutorial-standalone.svg)](https://travis-ci.org/sdiehl/llvm-tutorial-standalone)
+[![MIT License](http://img.shields.io/badge/license-mit-blue.svg)](https://github.com/sdiehl/wiwinwlh/blob/llvm-tutorial-standalone/LICENSE)
 
 A minimal LLVM builder. Basically the same code as the [Haskell Kaleidoscope
 tutorial](http://www.stephendiehl.com/llvm/) uses but without going through a
