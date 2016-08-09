@@ -83,7 +83,7 @@ main = do
 ```
 
 This will generate and JIT compile into the following IR and use the LLVM
-execution engine to JIT it to machien code.
+execution engine to JIT it to machine code.
 
 ```llvm
 ; ModuleID = 'my cool jit'
