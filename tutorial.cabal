@@ -18,8 +18,8 @@ executable main
     mtl                  >= 2.2,
     containers           >= 0.5,
 
-    llvm-general         >= 3.5.0.0 && < 3.5.2.0,
-    llvm-general-pure    == 3.5.0.*
+    llvm-general         == 3.8.*,
+    llvm-general-pure    == 3.8.*
 
   other-modules:
     Codegen
@@ -29,6 +29,6 @@ executable main
   hs-source-dirs:      src
   main-is:             Main.hs
 
-  Include-dirs:       cbits
+  Include-dirs:        cbits
   C-sources:
     cbits/lib.c
